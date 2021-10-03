@@ -44,7 +44,7 @@
 </head>
 
 <body>
-    <main x-data="{ boxes: [], from: $persist(null), to: $persist(null) }" x-init="boxes=getBoxes();">
+    <main x-data="{ boxes: [], from: $persist(1), to: $persist(2) }" x-init="boxes=getBoxes();">
         <a x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">Open directions in app</a>
         <p>Current box:</p>
         <select id="start" x-on:change="getDirections" x-model="from">
