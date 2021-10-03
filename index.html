@@ -1,0 +1,5298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Document</title>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDH8SjnFfgynRvPFHedxAgLrI8BM3tcdk&callback=initMap"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            height: 100vh;
+            margin: 0;
+        }
+        main {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-left: 5vw;
+            padding-right: 5vw;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        #map {
+            flex: 1;
+            /* height: 100%; */
+            width: 100%;
+            align-self: center;
+            margin-bottom: 20px;
+        }
+        select {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <main x-data="{ boxes: [], from: null, to: null }" x-init="boxes=getBoxes(); initMap();">
+        <div id="map">
+
+        </div>
+        <a x-show="from" x-bind:href="`https://maps.google.com/?saddr=${from}&daddr=${to}`">Open directions in app</a>
+        <a x-show="! from" x-bind:href="`https://maps.google.com/?daddr=${to}`">Open directions in app</a>
+        <p>From:</p>
+        <select id="start" x-on:change="getDirections" x-model="from">
+            <option value="">My location</option>
+            <template x-for="box in boxes">
+                <option
+                    x-bind:value="`${box.location[1]},${box.location[0]}`"
+                    x-bind:data-lat="box.location[1]"
+                    x-bind:data-long="box.location[0]"
+                    x-text="box.id + ' - ' + box.name"></option>
+            </template>
+        </select>
+        <p>To:</p>
+        <select id="end" x-on:change="getDirections" x-model="to">
+            <template x-for="box in boxes">
+                <option
+                    x-bind:value="`${box.location[1]},${box.location[0]}`"
+                    x-bind:data-lat="box.location[1]"
+                    x-bind:data-long="box.location[0]"
+                    x-text="box.id + ' - ' + box.name"></option>
+            </template>
+        </select>
+    </main>
+</body>
+
+<script>
+    let geojson;
+
+    function getBoxes() {
+        return geojson.features.map(place => {
+            if (place.properties.folderName !== 'Beat Boxes') {
+                return null;
+            }
+            return {
+                'id': place.properties.name.match(/\d+/)[0],
+                'name': place.properties.description,
+                'location': place.geometry.coordinates
+            }
+        }).filter(e => e !== null);
+    }
+
+    geojson =
+    {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7926195,
+                        51.5995095,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Abbey Meads Community Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76907499999993,
+                        51.5871782,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beechcroft Infants School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.6472237,
+                        51.551187,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Bishopstone Primary\n",
+                    "styleUrl": "#icon-1899-0288D1",
+                    "description": "No suitable box location",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.80376079999996,
+                        51.6028315,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Bridlewood Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.819456,
+                        51.6047995,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Brimble Hill Special School",
+                    "styleUrl": "#icon-1899-F57C00-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.83674989999997,
+                        51.5707191,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Brook Field Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.800071,
+                        51.5950283,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Catherine Wayte Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7308115,
+                        51.5467084,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "The Chalet School",
+                    "styleUrl": "#icon-1899-F57C00-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.72497329999999,
+                        51.5175129,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Chiseldon Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.73983499999997,
+                        51.5706564,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Colebrook Infant",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.73841089999996,
+                        51.5703935,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Colebrook Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.73448259999998,
+                        51.56577,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Covingham Park Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.77632300000005,
+                        51.5461298,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "The Croft Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.77247339999997,
+                        51.5799765,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Crowdys Hill School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7715346,
+                        51.5608156,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Drove Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79080410000006,
+                        51.5428287,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "East Wichel Community Primary School & Nursery",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7064358,
+                        51.6296844,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Eastrop Infant School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.73692719999997,
+                        51.5545496,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Eldene Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.80637750000005,
+                        51.5665504,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Even Swindon Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79112280000004,
+                        51.5722649,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Ferndale Community Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.74662460000002,
+                        51.5588985,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Goddard Park Community Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.774576,
+                        51.5728159,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Gorse Hill School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.74877830000003,
+                        51.5848753,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Grange Infant School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.74728920000007,
+                        51.5790372,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Grange Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7898852,
+                        51.5711479,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "EOTAS Fernbrook Centre Swindon",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7940916,
+                        51.5879963,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Greenmeadow Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8080526,
+                        51.5886725,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Haydon Wick Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.81077690000006,
+                        51.5925112,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Haydonleigh Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.82302800000002,
+                        51.5531392,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Hazelwood Academy School and Nursery",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76695549999999,
+                        51.5625953,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Holy Cross Catholic Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.74408870000002,
+                        51.5621051,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Holy Family Catholic Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.77865759999997,
+                        51.5579884,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Holy Rood Catholic Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.78012839999997,
+                        51.5536818,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "King William CE Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76494290000005,
+                        51.55793,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Lainesmead Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76126039999997,
+                        51.5455255,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Lawn Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.77961440000001,
+                        51.5500227,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Lethbridge Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.73189330000002,
+                        51.5463971,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Liden Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.84036930000002,
+                        51.5495622,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Millbrook Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.81044599999996,
+                        51.5822764,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Moredon Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.75782319999996,
+                        51.5636216,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Mountford Manor Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.74025140000003,
+                        51.5654749,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Nythe Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7416959,
+                        51.5654125,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Nyland School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.82992079999997,
+                        51.6019729,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Oakhurst Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.75015150000002,
+                        51.5518623,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Oaktree Nursery and Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.83184670000003,
+                        51.5549262,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Oliver Tomkins C Of E Infant & Nursery School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.83091760000002,
+                        51.554943,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Oliver Tomkins Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.81639189999999,
+                        51.5972294,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Orchid Vale Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.83545100000003,
+                        51.578152,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Peatmoor Community Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.82060439999998,
+                        51.6040304,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Red Oaks Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79813089999993,
+                        51.5568108,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Robert Le Kyng Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79930460000003,
+                        51.5833219,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Rodbourne Cheney Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.75837920000004,
+                        51.5881713,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Ruskin Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.78574930000002,
+                        51.5903096,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Seven Fields Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.83132909999995,
+                        51.5635335,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Shaw Ridge Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.72097429999997,
+                        51.589792,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "South Marston C Of E Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.70966050000004,
+                        51.62788,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Southfield Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76062839999997,
+                        51.590923,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "St Catherine's Catholic Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8241247,
+                        51.5932418,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Saint Francis C of E Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7734469,
+                        51.5910503,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "St Lukes Academy",
+                    "styleUrl": "#icon-1899-F57C00-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.78072680000002,
+                        51.6127565,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "St Leonard's CE Primary Academy",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7959578,
+                        51.5740692,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "St Mary's Catholic Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.76794229999996,
+                        51.5853751,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Stratton Education Centre",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7818658,
+                        51.5939197,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Swindon Academy",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.82350280000003,
+                        51.6104706,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Tadpole Farm CE Primary Academy",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.84257830000001,
+                        51.5607268,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Tregoze Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.81833,
+                        51.604338,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Uplands School",
+                    "styleUrl": "#icon-1899-F57C00-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.6995543,
+                        51.5467953,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Wanborough Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.82358640000007,
+                        51.5616806,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Westlea Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.71496920000004,
+                        51.6342824,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Westrop Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79660799999999,
+                        51.5236711,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Wroughton Infant School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.79340300000001,
+                        51.531265,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Wroughton Junior School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7336975,
+                        51.5375049,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Badbury Park Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8098531,
+                        51.6164512,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "William Morris Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8108905,
+                        51.6158676,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Churchward School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8094899,
+                        51.5454262,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Kingfisher Primary School",
+                    "styleUrl": "#icon-1899-0288D1-nodesc",
+                    "folderName": "Schools"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7061126,
+                        51.6383084,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 1",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "The Knowlands - Lamppost 26 at the start of the footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7131564,
+                        51.6368449,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 2",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lamppost 11 on grassy verge next to the junction of Brookfield and Grove Hill",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7146209,
+                        51.6333687,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 3",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Newburgh Place - Outside Pharmacy on lamppost 7",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7063651,
+                        51.6331624,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 4",
+                    "styleUrl": "#icon-1899-F9A825-labelson",
+                    "description": "The Cullerns - Lamppost 21",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7075318,
+                        51.6302872,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 5",
+                    "styleUrl": "#icon-1899-F9A825-labelson",
+                    "description": "Eastrop Road - Lamppost 21 not far from Eastrop Infant school entrance. ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.718545,
+                        51.6308582,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 6",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Windrush - Lamppost 37 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7112708,
+                        51.6284873,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 7",
+                    "styleUrl": "#icon-1899-F9A825-labelson",
+                    "description": "Shrivenham Road - On telegraph pole 3 outside the school",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7807025,
+                        51.6132733,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 8",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Linley Rd - Lamppost 8",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7842698,
+                        51.6161446,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 9",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On corner with Malthouse Close and Churchway on 30 mph sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.788084,
+                        51.6127053,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 10",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "High Street - on no stopping sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8234944,
+                        51.6106449,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 11",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Greene St - One way street sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8287086,
+                        51.6078632,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 12",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Mackay Cresent - Lamppost on corner",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8359,
+                        51.6038238,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 13",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Mayfly Road - On lamppost 4 along footpath by the bridge going over the river",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8294945,
+                        51.6022426,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 14",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pioneer Rd - Lamppost 19 outside school gate ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8254596,
+                        51.6045833,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 15",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Gabriel Crescent - On lamppost 5 by the park by footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8195355,
+                        51.6062974,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 16",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Tadpole Ln - On lamppost 39 at end of footpath ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8155282,
+                        51.60747,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 17",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "William Morris Way - on lamppost 3 to the footpath from nature reserve",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.813214,
+                        51.6058169,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 18",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Purcell Road – Lamppost 4163/012 by crossing on Purcell road.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8195194,
+                        51.6025125,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 19",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Redhouse Way - First lamppost 62 on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8236354,
+                        51.6001476,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 20",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Oakhurst Way - On lamppost 03 along footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8117357,
+                        51.6010497,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 21",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Inside park by outdoor gym, lamppost 42",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8041128,
+                        51.602924,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 22",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Chartwell Rd - Lamppost 15 outside school ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.799266,
+                        51.6063507,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 23",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Wallis Dr - Lamppost no.10 by the junction of Thornhill Drive",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.790809,
+                        51.603552,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 24",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Highdown Way - Lamppost\t4019/30 behind hedge",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7982255,
+                        51.6014321,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 25",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pennine Way - On lamppost 13 along the footpath behind bushes ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7858956,
+                        51.5994163,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 26",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Warrener Close - On lamppost 27 along footpath towards play park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7935757,
+                        51.5996536,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 27",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Swift Ave - On lamppost 14a outside school and near footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7998333,
+                        51.598349,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 28",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Kelly Gardens - On lamppost 6",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7990428,
+                        51.5584545,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 29",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Ford Street - Parking sign ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8164563,
+                        51.597526,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 30",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Torun Way - On no cars sign on Footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8240377,
+                        51.5974701,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 31",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Friday Street - On lamppost 3 at the end of footpath by wooden bin",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8246532,
+                        51.5931272,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 32",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Connelly Close - Lamppost 6 on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.821186,
+                        51.5917005,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 33",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Stevenson Road - On Lamppost 17 on path with blue pedestrian sign. ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8148592,
+                        51.5943575,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 34",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Winterbourne Road - Lamppost 5 on footpath.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8109256,
+                        51.5919191,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 35",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Haydon Ct Dr - Lamppost/sign by school entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8004596,
+                        51.5946651,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 36",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Elstree Way - Lamppost 5",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.794722,
+                        51.5948062,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 37",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cooperfields - On red lamppost 6 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7901375,
+                        51.5971694,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 38",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Emerson Close - Lamppost 38 by the path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7835161,
+                        51.5948759,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 39",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Downton Rd - No entry sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7322671,
+                        51.5473104,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 40",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Fairlawn - Lamppost\t1609/25 by the junction of paths",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7524137,
+                        51.5901961,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 41",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On sign with directions by the Scouts HQ",
+                    "Accessibility badge": "N",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7595721,
+                        51.5908743,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 42",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Ermin St - Lamppost no.29 next to school entrance by bus layby",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7653437,
+                        51.5907258,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 43",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Brooks Close - On lamppost 19 at the beginning of path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.779618,
+                        51.5898876,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 44",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Penhill Drive  - On hump sign just before roundabout",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7853347,
+                        51.590646,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 45",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Leigh Rd - Lamppost 5 on footpath outside school gate",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7969289,
+                        51.5906187,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 46",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On lamppost 6013 20 along footpath. West corner of Sevenfields",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8029702,
+                        51.5910109,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 47",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Tweed Cl - 'Emmanuel Church' sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8094987,
+                        51.5886863,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 48",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "The Brow - Lamppost 3 to right of footpath ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8148631,
+                        51.5879764,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 49",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Bryony Way - Lamppost no.12 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8210992,
+                        51.5879714,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 50",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Southernwood Dr - Lamppost no.1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8086457,
+                        51.5826033,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 51",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Moredon Rd - School/20 mph sign on lamppost 97",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8022492,
+                        51.5869696,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 52",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Avon Mead - Lamppost 1 on cycle path opposite Medway Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.794135,
+                        51.5868715,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 53",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pen Close - lamppost 15 on the corner of Pen Close and Thames Avenue",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7907643,
+                        51.5890295,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 54",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On blue walking/cycling sign in park off Kennet Ave",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7816181,
+                        51.5869886,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 55",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Temporarily on lamppost 6 near play park at the end of Hilary Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.770325,
+                        51.5875131,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 56",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Beechcroft Rd - 'Beechcroft Infants School' sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7584643,
+                        51.5880397,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 57",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Wordsworth Drive - On No Stopping sign on grassy area outside Ruskin Junior School.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7619035,
+                        51.5839609,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 58",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Meadowcroft - On lamppost 13",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7676311,
+                        51.5853468,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 59",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Clays Close - Lamppost 1310 1 outside Education Centre ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.766004,
+                        51.5810015,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 60",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Headlands Grove - On lamppost PC04 on Headlands.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7727001,
+                        51.5805567,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 61",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Jefferies Avenue - On path coming off Jefferies Avenue near Crowdy’s Hill School - Lamppost 1768 12",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7808863,
+                        51.5828031,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 62",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pinehurst Road - On lamppost running along footpath through green, by the seating area",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7905354,
+                        51.5833766,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 63",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Whitworth Rd - Lamppost 66",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7993962,
+                        51.5832858,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 64",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Moredon Road - On lamppost 67 by the school",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8018758,
+                        51.5796398,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 65",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Manor Cres - Lamppost 1 on cycle path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7872383,
+                        51.580771,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 66",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On railings outside Swindon Academy",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7943443,
+                        51.5773013,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 67",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Northern Road - Lamppost 0008 on footpath opposite Tovey Road junction",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7954171,
+                        51.5738757,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 68",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Bessemer Rd E - Lamppost 3 in front of school entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7915492,
+                        51.5721953,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 69",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Wiltshire Avenue - Lamppost 7 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7856082,
+                        51.5766253,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 70",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pinehurst Rd - Pedestrian sign at start of footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7831513,
+                        51.5701098,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 71",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "St Marks Recreation Ground - on post supporting football cage.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7750068,
+                        51.5727821,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 72",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Avening Street - Lamppost 5",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7777227,
+                        51.57629,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 73",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "May Close - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7469495,
+                        51.5863198,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 74",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Hatch Road - Lamppost on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7492267,
+                        51.5842349,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 75",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Ermin Street - Lamppost 7 in front of school",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7438704,
+                        51.5827516,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 76",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Rainer Close - Lamppost no.5 at beginning of footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7412043,
+                        51.5799131,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 77",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Blake Crescent - First lamppost down the alley",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7456031,
+                        51.5788197,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 78",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Grange Drive - Pedestrian sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7519331,
+                        51.5790664,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 79",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Swindon Rd - Lamppost 1 close to the junction of Casson Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7498519,
+                        51.5754275,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 80",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Grange Drive - On cycle sign on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7452909,
+                        51.5731229,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 81",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Colebrook Road - On lamppost 6 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.732814,
+                        51.572635,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 82",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Constantine Close - On lamppost 4 along cycle/ pedestrian path ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7412016,
+                        51.5702732,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 83",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Swan Close - Lamppost 1 by the cycle path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7344208,
+                        51.5676754,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 84",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Falconscroft - Lamppost 4 by the path off of Falconscroft",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7259805,
+                        51.5674066,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 85",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Merlin Way - Lamppost 73",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7273128,
+                        51.5643507,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 86",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On Foxbridge road sign ",
+                    "Accessibility badge": "",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7299282,
+                        51.5611213,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 87",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "St Pauls Dr - Lamppost 25 on footpath by bridge over Dorcan Stream",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7349654,
+                        51.565033,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 88",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "The Harriers - Pedestrian sign on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7401488,
+                        51.5656441,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 89",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Nyland Rd - Lamppost 4 outside school entrance ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7460598,
+                        51.5665639,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 90",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Darwin Close - Lamppost 11 along pathway off Darwin Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7445436,
+                        51.5618766,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 91",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Marlowe Avenue - Lamppost 41",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7379239,
+                        51.5615585,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 92",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "The Drive - On lamppost 35 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.736733,
+                        51.559182,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 93",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Elmore - Lamppost 355",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7364514,
+                        51.5551613,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 94",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Collingsmead - Eldene school sign in front of gate",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7366342,
+                        51.5522619,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 95",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Hewitt Close - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7331221,
+                        51.5509406,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 96",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lamppost\t1609/11 on the footpath near bridge",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7287671,
+                        51.5494198,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 97",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Eastmere - Lamppost\t0320/02 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7291014,
+                        51.544616,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 98",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Tryon Close - Lamppost\t1606/01 on footpath off Tyron Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7311587,
+                        51.5402872,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 99",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Polsedon Avenue - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7383638,
+                        51.5412223,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 100",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Biddestone avenue – on lamppost 1482 7 next to footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7280722,
+                        51.5362625,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 101",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Homington Avenue - Lamppost 1480/38 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7369933,
+                        51.5456178,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 102",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Okebourne Park - Lamppost 22 along pathway in front of brick wall",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7396383,
+                        51.5486093,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 103",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Overbrook - On lamppost between 83-95",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7430308,
+                        51.5535587,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 104",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Shaftsbury Ave - First street lamp on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7461287,
+                        51.5589718,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 105",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Welcombe Ave - On right of way sign outside school gates",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7519437,
+                        51.5611662,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 106",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Buckhurst Crescent - cycling directions sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7569488,
+                        51.5643527,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 107",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Huntley Close - Post outside play area at the end of Huntley Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7583306,
+                        51.5595916,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 108",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Frobisher Drive - On Lamppost 7 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7530409,
+                        51.5577729,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 109",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Kingswood Avenue - Plain post by mini roundabout",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7576972,
+                        51.5546727,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 110",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Whitbourne Avenue - Plain post outside community centre",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.749782,
+                        51.5525163,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 111",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Priory Road - Lamppost by gate to caged court",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7561421,
+                        51.5486673,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 112",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Queens Drive - Pedestrian sign ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7479205,
+                        51.5487336,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 113",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cranmore Avenue - Lamppost no.30",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7466491,
+                        51.5449873,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 114",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Coate Water Country Park - Cycle lane sign at the entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7438294,
+                        51.5421611,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 115",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On the railing at Coate Water",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8062488,
+                        51.5968639,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 116",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "White pillar by the library near Orbital shopping centre",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7611707,
+                        51.5462333,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 117",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cleeve Lawns - Lamppost 5 heading towards Lawn Primary School",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.762069,
+                        51.5434786,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 118",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Downs Views Road - Lamppost 85 on the corner of Downs Views Road and B4006",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7903987,
+                        51.5576342,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 119",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "White Head Street - Turn left sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7716094,
+                        51.5394598,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 120",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pipers Way - Lamppost 40 on cycle path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7792882,
+                        51.5389011,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 121",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On black post on entrance to footpath just off main road B4006",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7853159,
+                        51.5411439,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 122",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cornwood Road - Lamppost 16 on E Wichel Way opposite Cornwood Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7905489,
+                        51.5427754,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 123",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Staldon Road - No parking lamppost ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7958543,
+                        51.5427504,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 124",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Barbrook Road - Lamppost 1 at junction with East Wichel Way",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7887277,
+                        51.547483,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 125",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Roman Crescent - Lamppost in front of large green hedge",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7788717,
+                        51.5444553,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 126",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Tismeads Crescent - Lamppost 2",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7725003,
+                        51.5473142,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 127",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Malborough Lane - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7693996,
+                        51.5498844,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 128",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lakeside cornet with Sandown Ave – Plain post next to lamppost with cycleway sign on footpath entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.763055,
+                        51.5522896,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 129",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On lamppost 2 at junction of paths between Highclere avenue and Falmouth Grove. ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7649794,
+                        51.5582565,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 130",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Eastern Avenue - Lamppost 12 outside the school gate",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7668945,
+                        51.5623852,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 131",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Queens Drive - Lamppost 1 to right of school building ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7667443,
+                        51.566872,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 132",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Shrivenham Road - On vehicle restriction sign at the end of Shrivenham Road.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7762549,
+                        51.5680537,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 133",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Behind the railing on station road by the swindon car and van rental",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7720067,
+                        51.5638392,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 134",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Swindon Town Football Club - Lamppost outside club shop",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7723299,
+                        51.5602441,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 135",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Southampton Street - On the parking sign by the school",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7712718,
+                        51.5563604,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 136",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Upham Road – On no stopping sign outside house number 8 ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7738956,
+                        51.5519149,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 137",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On the roundabout sign post by the park entrance (between Charlotte Mews and Horder Mews)",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7784789,
+                        51.5496126,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 138",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Avenue Road - On dead end sign opposite Avenue Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7793184,
+                        51.5535903,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 139",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "King William Street - Parking Restrictions sign.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7785688,
+                        51.5579346,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 140",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Durham St - No stopping sign ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7767691,
+                        51.5617623,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 141",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Plymouth Street - on parking sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.782746,
+                        51.5660075,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 142",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Alexandria Road - On the no entry sign (Station Road corner with Alexandra Road)",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7868474,
+                        51.5625477,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 143",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Fleet Street - Lamppost 2 outside Krakow Polski Sklep",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7870887,
+                        51.5594119,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 144",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Market Street - Parking sign by the side of T4 Cameras shop",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7850728,
+                        51.5558375,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 145",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Savernake Street - Parking sign by playground",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7864746,
+                        51.5532368,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 146",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Landsdown Road - 20mph sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7948002,
+                        51.5512154,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 147",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Portland Avenue - 20/30 mph sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7978312,
+                        51.5532168,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 148",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Valleyside - Lamppost 1 by the corner of Valleyside",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8283063,
+                        51.5537972,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 149",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lamppost 6 at the end of Truro path",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7963975,
+                        51.5570851,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 150",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "No stopping sign at the junction of Westcott St and Westcott Pl",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7933604,
+                        51.5607142,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 151",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Speed hump sign at the top of Church Place",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7977063,
+                        51.5633565,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 152",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "National Trust Building - On white pillar on the walk up to the main entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7993143,
+                        51.5664744,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 153",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Barnum Ct - Lamppost 8",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8079966,
+                        51.5658816,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 154",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pasture Close - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8055826,
+                        51.5636624,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 155",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Morris St - Yellow parking restriction sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8054539,
+                        51.5595871,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 156",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Redcliffe St - Lamppost on footpath ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8180281,
+                        51.5588801,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 157",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Welton Road - Lamppost on footpath between Feather Wood houses and tennis courts",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8215418,
+                        51.556829,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 158",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Westlea Drive – Lamppost to the left of bus stop",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8173882,
+                        51.5541163,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 159",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Markenfield Road - on lamppost 2 at the end of the road leading in Mayenden Park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8225127,
+                        51.5532535,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 160",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Stokesay Dr - No stopping sign ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8223003,
+                        51.5504564,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 161",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Beverley - Footpath crossroad off Beverley",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8346499,
+                        51.5483589,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 162",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Worsley Road - Lamppost 13 in front of the Fort Park ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8407732,
+                        51.5498777,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 163",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Worsley Rd - Lamppost on footpath next to 'Freshbrook Centre' sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8494904,
+                        51.5570625,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 164",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Gower Close - On Lydiard Park sign just in woodland area off Gower Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.842231,
+                        51.5552112,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 165",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Sudeley Way - First lamppost on footpath off Sudeley Way ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8366131,
+                        51.5547778,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 166",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On lamppost 16 by the footpath between Rowton Heath Way corner with Gainsborough way",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8317261,
+                        51.55573,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 167",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Beaumaris Rd - No parking sign to right of car park exit, if fence attached to sign is too in the way, move to no stopping sign or lamppost next to bus stop",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8371803,
+                        51.5580206,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 168",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Ascham Road - On lamppost at the beginning of footpath Ascham Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8417415,
+                        51.5603876,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 169",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Sleaford Cl - Lamppost to right of school entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8500698,
+                        51.561835,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 170",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lydiard Park - On have you paid and displayed sign on the entrance to the Lydiard Park from car park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8339296,
+                        51.5618239,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 171",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Shaw play park - Lamppost 7 next to Shaw play park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8299589,
+                        51.5597556,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 172",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "ASDA - On pedestrian sign on footpath leading out of ASDA ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8248784,
+                        51.5614548,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 173",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Langstone Way - On No Stopping sign outside school",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8305272,
+                        51.564176,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 174",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Ridge Green - Lamppost no.11",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8336084,
+                        51.5670764,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 175",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cyclist dismount at crossroads of footpaths on Tumpy field",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8281608,
+                        51.5684207,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 176",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Nuffield Close - road sign on corner next to footpath to the park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8402421,
+                        51.5674039,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 177",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Middleleaze park - on lamppost on footpath before tunnel which goes under Roughmoor Way.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.847275,
+                        51.5682208,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 178",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Middleleaze Drive - Lamppost 10",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8415341,
+                        51.5718326,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 179",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On lamppost 2343 6 through park between Oasthouse Close, Harptree close, Yarnton close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8352157,
+                        51.5704032,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 180",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cartwright Drive - First lamppost on footpath",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.772039,
+                        51.5754492,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 181",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Tydeman Street - At subway of Tydeman street",
+                    "Accessibility badge": "",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8272174,
+                        51.577933,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 182",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Portmore Close - Lamppost 45 on footpath next to footbridge",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8350152,
+                        51.5777608,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 183",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Pepperbox Hill - No stopping sign outside school entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8414895,
+                        51.5764108,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 184",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "On lamppost 21 - Swinley Drive",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8004173,
+                        51.5315459,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 185",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Maunsell Way - BMX pump track ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7925766,
+                        51.5300589,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 186",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Inverary Road – No stopping sign on other side of the road.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7949825,
+                        51.5270287,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 187",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Kerr Way - On lamppost 5",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7956343,
+                        51.5236435,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 188",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Wharf Road - Small no parking sign / school bus sign to right of school entrance",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7894626,
+                        51.5244721,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 189",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Devizes Road - Street lamp just inside park entrance ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7356735,
+                        51.5146985,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 190",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "New Road - On roundabout road sign tucked behind wall on the wider pavement.",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7277342,
+                        51.5144581,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 191",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "New Road - On dead-end sign on junction Canney Close",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7256039,
+                        51.5172168,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 192",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Castle View Road - No stopping sign",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.6993403,
+                        51.5424517,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 193",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Church Road - On 30 mph sign opposite the entrance to Kite Hill road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.6994423,
+                        51.5466654,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 194",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "The Beanlands - Lamppost next to large green space next to school ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.6964328,
+                        51.5495142,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 195",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "High Street - Sign labelled 1-7 box hedge ",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7259747,
+                        51.5875863,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 196",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "St Julian's Close - Lamppost 1",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7224234,
+                        51.5895395,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 197",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Thornhill Road - On warning sign for speed bump next to entrance to park on Thornhill Road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7186362,
+                        51.5891129,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 198",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Church Ground - Lamppost on the corner in front of house 28",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8385973,
+                        51.5812411,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 199",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Quarry Field - Lamppost 2 outside park",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8333124,
+                        51.5808066,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 200",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Cowgleaze - Lamppost 6 at the end of cycle and walking path inside trees",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7332171,
+                        51.5376286,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 201",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Rainscombe Road - No stopping sign on Rainscombe Rd",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.77827,
+                        51.5651964,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 202",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Gladstone Street - restricted parking zone Sign on pedestrianised road",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8174867,
+                        51.6131434,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Beat Box 203",
+                    "styleUrl": "#icon-1899-097138-labelson",
+                    "description": "Lamppost in front of house 98 on William Morris Way",
+                    "Accessibility badge": "Y",
+                    "folderName": "Beat Boxes"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7916122,
+                        51.5584425,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Cumbria bridge",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8353967,
+                        51.5482851,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Worsley Road",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8335503,
+                        51.5621786,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Linear park",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.811127,
+                        51.6012403,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Eastbury way",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7805569,
+                        51.5509602,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Quarry Road",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7925283,
+                        51.5773006,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Outdoor gym",
+                    "styleUrl": "#icon-1899-FFEA00",
+                    "description": "Tovey Road",
+                    "folderName": "Outdoor Gyms"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7460264,
+                        51.5798866,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Grange Leisure Centre",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7840179,
+                        51.5616761,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Swindon Shopmobility",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8081814,
+                        51.5926877,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Haydon Centre and Gym",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7803339,
+                        51.5816304,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Pinetrees Community Centre",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.729338,
+                        51.560181,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Dorcan Recreation Complex",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7973772,
+                        51.5638334,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "National Trust - Heelis",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7131376,
+                        51.6289577,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Halo Highworth Recreation Centre",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7769762,
+                        51.5516159,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Old Town Library",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.791977,
+                        51.531512,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Ridgeway Leisure Centre",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7913889,
+                        51.5238889,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Ellendune Community Centre",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7811896,
+                        51.5587122,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Central Library Swindon",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.8311119,
+                        51.5581797,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "West Swindon Library",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -1.7498899,
+                        51.553097,
+                        0
+                    ]
+                },
+                "properties": {
+                    "name": "Park Library",
+                    "styleUrl": "#icon-1899-FBC02D-nodesc",
+                    "folderName": "Distribution Points"
+                }
+            }
+        ]
+    }
+
+</script>
+
+<script>
+    let directionsService;
+    let directionsRenderer;
+
+    function initMap() {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            var swindon = new google.maps.LatLng(51.561722859751676, -1.7888766307208295);
+            var mapOptions = {
+                zoom: 14,
+                center: swindon
+            }
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            directionsRenderer.setMap(map);
+        }
+
+        function getDirections() {
+            const startElem = document.getElementById('start').querySelector('option:checked');
+            const endElem = document.getElementById('end').querySelector('option:checked');
+            const start = new google.maps.LatLng(startElem.dataset.lat, startElem.dataset.long);
+            const end = new google.maps.LatLng(endElem.dataset.lat, endElem.dataset.long);
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: 'WALKING'
+            };
+            console.log(`Getting ${request.origin.lat()},${request.origin.lng()} to ${request.destination.lat()},${request.destination.lng()}`);
+            directionsService.route(request, function (result, status) {
+                if (status == 'OK') {
+                    directionsRenderer.setDirections(result);
+                }
+            });
+        }
+
+</script>
+</html>
