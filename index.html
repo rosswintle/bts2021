@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Document</title>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDH8SjnFfgynRvPFHedxAgLrI8BM3tcdk&callback=initMap"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <title>Beat the Street 2021</title>
+    <!-- Alpine Plugins -->
+    <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Alpine Core -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -40,28 +44,27 @@
 </head>
 
 <body>
-    <main x-data="{ boxes: [], from: null, to: null }" x-init="boxes=getBoxes(); initMap();">
-        <div id="map">
-
-        </div>
-        <a x-show="from" x-bind:href="`https://maps.google.com/?saddr=${from}&daddr=${to}`">Open directions in app</a>
-        <a x-show="! from" x-bind:href="`https://maps.google.com/?daddr=${to}`">Open directions in app</a>
-        <p>From:</p>
+    <main x-data="{ boxes: [], from: $persist(null), to: $persist(null) }" x-init="boxes=getBoxes();">
+        <a x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">Open directions in app</a>
+        <p>Current box:</p>
         <select id="start" x-on:change="getDirections" x-model="from">
-            <option value="">My location</option>
-            <template x-for="box in boxes">
+            <template x-for="(box, index) in boxes">
                 <option
-                    x-bind:value="`${box.location[1]},${box.location[0]}`"
+                    :key="index"
+                    :value="index"
+                    :selected="index == from"
                     x-bind:data-lat="box.location[1]"
                     x-bind:data-long="box.location[0]"
                     x-text="box.id + ' - ' + box.name"></option>
             </template>
         </select>
-        <p>To:</p>
+        <p>Next box:</p>
         <select id="end" x-on:change="getDirections" x-model="to">
-            <template x-for="box in boxes">
+            <template x-for="(box, index) in boxes">
                 <option
-                    x-bind:value="`${box.location[1]},${box.location[0]}`"
+                    :key="index"
+                    :value="index"
+                    :selected="index == to"
                     x-bind:data-lat="box.location[1]"
                     x-bind:data-long="box.location[0]"
                     x-text="box.id + ' - ' + box.name"></option>
@@ -5260,39 +5263,4 @@
 
 </script>
 
-<script>
-    let directionsService;
-    let directionsRenderer;
-
-    function initMap() {
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer();
-            var swindon = new google.maps.LatLng(51.561722859751676, -1.7888766307208295);
-            var mapOptions = {
-                zoom: 14,
-                center: swindon
-            }
-            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            directionsRenderer.setMap(map);
-        }
-
-        function getDirections() {
-            const startElem = document.getElementById('start').querySelector('option:checked');
-            const endElem = document.getElementById('end').querySelector('option:checked');
-            const start = new google.maps.LatLng(startElem.dataset.lat, startElem.dataset.long);
-            const end = new google.maps.LatLng(endElem.dataset.lat, endElem.dataset.long);
-            var request = {
-                origin: start,
-                destination: end,
-                travelMode: 'WALKING'
-            };
-            console.log(`Getting ${request.origin.lat()},${request.origin.lng()} to ${request.destination.lat()},${request.destination.lng()}`);
-            directionsService.route(request, function (result, status) {
-                if (status == 'OK') {
-                    directionsRenderer.setDirections(result);
-                }
-            });
-        }
-
-</script>
 </html>
