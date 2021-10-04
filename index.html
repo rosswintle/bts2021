@@ -51,6 +51,7 @@
         p {
             margin-top: 8px;
             margin-bottom: 8px;
+            width: 100%;
         }
         .label {
             display: block;
@@ -103,6 +104,11 @@
             font-size: 4.5rem;
             padding: 0;
             color: #000;
+            margin-bottom: 2rem;
+        }
+        progress {
+            display: block;
+            width: 100%;
         }
     </style>
 </head>
@@ -114,10 +120,15 @@
         <p><span class="label">Current box</span><span class="box-no" x-text="boxes[from].id"></span><span class="box-name" x-text="boxes[from].name"></span></p>
         <p><span class="label">Next box</span><span class="box-no" x-text="boxes[to].id"></span><span class="box-name" x-text="boxes[to].name"></span></p>
         <p class="buttons">
-            <button id="prevButton" x-on:click="from--; to--;">PREV</button>
-            <button id="nextButton" x-on:click="from++; to++;">NEXT</button>
+            <button id="prevButton" x-on:click="if (from > 0) { from--; to--; }">PREV</button>
+            <button id="nextButton" x-on:click="if (from < boxes.length - 2) { from++; to++; }">NEXT</button>
         </p>
         <a class="go" target="_blank" x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">GO!</a>
+        <p>
+            <span class="label">Progress</span>
+            <span class="progress" x-text="from + 1"></span> / <span class="progress" x-text="boxes.length - 1"></span>
+            <progress :max="boxes.length - 1" :value="from + 1"></progress>
+        </p>
     </main>
 </body>
 
