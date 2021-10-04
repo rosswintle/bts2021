@@ -115,8 +115,6 @@
 
 <body>
     <main x-data="{ boxes: [], from: $persist(0), to: $persist(1) }" x-init="boxes=getBoxes();">
-        <h1>Beat the Street</h1>
-        <h2>The Big Bike Ride 2021</h2>
         <p><span class="label">Current box</span><span class="box-no" x-text="boxes[from].id"></span><span class="box-name" x-text="boxes[from].name"></span></p>
         <p><span class="label">Next box</span><span class="box-no" x-text="boxes[to].id"></span><span class="box-name" x-text="boxes[to].name"></span></p>
         <p class="buttons">
