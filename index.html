@@ -15,6 +15,7 @@
     <style>
         * {
             box-sizing: border-box;
+            font-family: sans-serif;
         }
         body {
             height: 100vh;
@@ -22,13 +23,34 @@
         }
         main {
             width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
             height: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
             padding-left: 5vw;
             padding-right: 5vw;
             padding-top: 20px;
             padding-bottom: 20px;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+        h1 {
+            margin-bottom: 4px;
+        }
+        h2 {
+            margin-top: 4px;
+        }
+        .label {
+            display: block;
+            margin-bottom: 4px;
+            color: #999;
+        }
+        .box-no {
+            display: block;
+            font-size: 2.5rem;
         }
         #map {
             flex: 1;
@@ -40,36 +62,54 @@
         select {
             max-width: 100%;
         }
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        button {
+            border: 0 none;
+            background: #BADA55;
+            padding: 1rem 2rem;
+            box-shadow: none;
+            font-size: 2rem;
+            border-radius: 8px;
+        }
+        #prevButton {
+            font-size: 1.2rem;
+            margin-right: 2rem;
+            padding: 0.5rem 1rem;
+        }
+        .go {
+            display: block;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #00BD0C;
+            text-align: center;
+            line-height: 200px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 4.5rem;
+            padding: 0;
+            color: #000;
+        }
     </style>
 </head>
 
 <body>
     <main x-data="{ boxes: [], from: $persist(0), to: $persist(1) }" x-init="boxes=getBoxes();">
-        <a x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">Open directions in app</a>
-        <p>Current box:</p>
-        <select id="start" x-on:change="getDirections" x-model="from">
-            <template x-for="(box, index) in boxes">
-                <option
-                    :key="index"
-                    :value="index"
-                    :selected="index == from"
-                    x-bind:data-lat="box.location[1]"
-                    x-bind:data-long="box.location[0]"
-                    x-text="box.id + ' - ' + box.name"></option>
-            </template>
-        </select>
-        <p>Next box:</p>
-        <select id="end" x-on:change="getDirections" x-model="to">
-            <template x-for="(box, index) in boxes">
-                <option
-                    :key="index"
-                    :value="index"
-                    :selected="index == to"
-                    x-bind:data-lat="box.location[1]"
-                    x-bind:data-long="box.location[0]"
-                    x-text="box.id + ' - ' + box.name"></option>
-            </template>
-        </select>
+        <h1>Beat the Street</h1>
+        <h2>The Big Bike Ride 2021</h2>
+        <p><span class="label">Current box</span><span class="box-no" x-text="boxes[from].id"></span><span class="box-name" x-text="boxes[from].name"></span></p>
+        <p><span class="label">Next box</span><span class="box-no" x-text="boxes[to].id"></span><span class="box-name" x-text="boxes[to].name"></span></p>
+        <p class="buttons">
+            <button id="prevButton" x-on:click="from--; to--;">PREV</button>
+            <button id="nextButton" x-on:click="from++; to++;">NEXT</button>
+        </p>
+        <a class="go" target="_blank" x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">GO!</a>
     </main>
 </body>
 
