@@ -82,7 +82,8 @@
         }
         button {
             border: 0 none;
-            background: #BADA55;
+            background: #333;
+            color: #FFF;
             padding: 0.8rem 1.4rem;
             box-shadow: none;
             font-size: 1.6rem;
@@ -118,8 +119,8 @@
         <p><span class="label">Current box</span><span class="box-no" x-text="boxes[from].id"></span><span class="box-name" x-text="boxes[from].name"></span></p>
         <p><span class="label">Next box</span><span class="box-no" x-text="boxes[to].id"></span><span class="box-name" x-text="boxes[to].name"></span></p>
         <p class="buttons">
-            <button id="prevButton" x-on:click="if (from > 0) { from--; to--; }">PREV</button>
-            <button id="nextButton" x-on:click="if (from < boxes.length - 2) { from++; to++; }">NEXT</button>
+            <button id="prevButton" x-on:click="if (from > 0) { from--; to--; }">&lt; PREV</button>
+            <button id="nextButton" x-on:click="if (from < boxes.length - 2) { from++; to++; }">NEXT &gt;</button>
         </p>
         <a class="go" target="_blank" x-bind:href="`https://maps.google.com/?saddr=${boxes[from].location[1]+','+boxes[from].location[0]}&daddr=${boxes[to].location[1]+','+boxes[to].location[0]}`">GO!</a>
         <p>
